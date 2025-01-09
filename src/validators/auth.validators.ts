@@ -7,6 +7,6 @@ export const registerValidation = [
 ];
 
 export const loginValidation = [
-    body('Email').withMessage('Please enter a valid email'),
+    body('Email').isEmail().withMessage('Please enter a valid email'),
     body('password').exists().withMessage('password is required')
 ];
