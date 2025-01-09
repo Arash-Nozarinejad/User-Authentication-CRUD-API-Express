@@ -24,7 +24,7 @@ model Post {
   title String
   content String
   Published Boolean @default(false)
-  author User @relation(fields: [authorId], reference: [id])
+  author User @relation(fields: [authorId], references: [id])
   authorId Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
