@@ -79,7 +79,7 @@ export const loginUser = async(req: Request, res:Response) => {
         user: {
             id: user.id,
             email: user.email,
-            password: user.password
+            username: user.username
         },
         token
     });
