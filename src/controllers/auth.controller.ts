@@ -84,3 +84,18 @@ export const loginUser = async(req: Request, res:Response) => {
         token
     });
 }
+
+export const getProfile = async (req: Request, res: Response) => {
+    const user = await prisma.user.findUnique({
+        where: { id: (req as any).user.id },
+        select: {
+          id: true,
+          email: true,
+          username: true,
+          createdAt: true
+        }
+      });
+    
+      res.json(user);
+    
+}
