@@ -5,7 +5,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
 export const registerUser = async (req:Request, res:Response) => {
-    const { email, username, password }: RegisterDTO = req.body;
+    const { email, username, password }: RegisterDTO = req.body;    
 
     const userExists = await prisma.user.findFirst({ /** All functions related to the database should be modularized. */
         where: {
