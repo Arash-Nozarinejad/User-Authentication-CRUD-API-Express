@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { RegisterDTO } from "../types";
+import { RegisterDTO, LoginDTO } from "../types";
 import prisma from '../utils/prisma';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
@@ -45,6 +45,42 @@ export const registerUser = async (req:Request, res:Response) => {
     res.status(201).json({
         message: 'User registered successfully',
         user,
+        token
+    });
+}
+
+export const loginUser = async(req: Request, res:Response) => {
+    const { email, password }: RegisterDTO = req.body;
+
+    const user = await prisma.user.findUnique({
+        where: {email}
+    });
+
+    if (!user){
+        res.status(401).json({ message: 'Invalid Credentials' });
+        return;
+    }
+
+    const passwordIsValid = await bcrypt.compare(password, user.password);
+
+    if (!passwordIsValid) {
+        res.status(401).json({ message: 'Invalid Credentials' });
+        return;
+    }
+
+    const token = jwt.sign(
+        { id: user.id, email: user.email, username: user.username} ,
+        process.env.JWT_SECRET as string,
+        { expiresIn: '24h' }
+    );
+
+    res.json({
+        message: 'Login successful',
+        user: {
+            id: user.id,
+            email: user.email,
+            password: user.password
+        },
         token
     });
 }
